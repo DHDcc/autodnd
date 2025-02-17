@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+readonly HYPRLAND_SOCKET2="$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock"
+
+activateNotifications() { swaync-client -df &> /dev/null; }
+deactivateNotifications() { swaync-client -dn &> /dev/null; }
+
+main() {
+  local socatOutput="${1}"
+
+  if [[ "${socatOutput}" != *"fullscreen"* ]] && [[ "${socatOutput}" != *"workspace"* ]]; then 
+       return
+  fi
+  
+  local isCurrentWorkspaceFullscrren="$(hyprctl activeworkspace | awk '/fullscreen: [0-1]/ {print $2}')"
+  local numberOfWindowsInCurrentWorkspace="$(hyprctl activeworkspace | awk '/windows: [0-9]/ {print $2}')"
+  local isNotificationsDeactivated="$(swaync-client -D)"
+  
+  
+  if [[ "${isCurrentWorkspaceFullscrren}" -eq "0" ]] || [[ "${numberOfWindowsInCurrentWorkspace}" -eq "0" ]]; then 
+        activateNotifications 
+        return
+  fi
+
+  if [[ "${isCurrentWorkspaceFullscrren}" -eq "1" ]] && [[ "${isNotificationsDeactivated}" == false ]]; then
+       deactivateNotifications
+  elif [[ "${isCurrentWorkspaceFullscrren}" -eq "0" ]] && [[ "${isNotificationsDeactivated}" == true ]]; then
+         activateNotifications
+  fi
+}
+
+if [[ -z "$HYPRLAND_INSTANCE_SIGNATURE" ]]; then
+  echo "Error: HYPRLAND_INSTANCE_SIGNATURE could not be determined."
+  echo "Ensure Hyprland is running and try again."
+  exit 1
+fi
+
+while true; do
+   socat - "UNIX-CONNECT:$HYPRLAND_SOCKET2" | while read -r socatOutput; do main "${socatOutput}"; done
+done
