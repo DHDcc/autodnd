@@ -10,16 +10,13 @@ Supported notification demons:
 
 ### Option 1: Use the installation script.
 
-#### 1) Clone the repo:
+> [!WARNING]
+> Always read and understand scripts before executing them!
+
 ```
-$ git clone https://github.com/DHDcc/autodnd.git
+curl -fsSL https://raw.githubusercontent.com/DHDcc/autodnd/refs/heads/main/install.sh | sh
 ```
-#### 2) Run the installation script:
-```
-$ cd autodnd
-$ chmod u+x install.sh
-$ ./install.sh
-```
+
 ### Option 2: Do it manually.
 
 
