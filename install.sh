@@ -13,11 +13,11 @@ fi
 
 mkdir --parents "$HOME/.local/bin" "$HOME/.config/systemd/user" || { printf >&2 "Failed to create directories.\n"; exit 1; }
 
-curl -fsSL "$autodndBashScriptUrl" > "$autodndBashScriptPath" || { printf >&2 "Failed to fetsh autodnd.\n"; exit 1; }
-chmod 700 "$autodndBashScriptPath" && printf ":: Installed autodnd.\n"
+curl -fsSL "$autodndBashScriptUrl" > "$autodndBashScriptPath" || { printf >&2 "Failed to fetch autodnd.\n"; exit 1; }
+chmod 700 "$autodndBashScriptPath" && printf ":: Installed autodnd in '$HOME/.local/bin'.\n" 
 
-curl -fsSL "$autodndSystemdServiceUrl" > "$autodndSystemdServicePath" || { printf >&2 "Failed to fetsh autodnd.service"; exit 1; }
-chmod 644 "$autodndSystemdServicePath" &&  printf ":: Installed autodnd.service.\n"
+curl -fsSL "$autodndSystemdServiceUrl" > "$autodndSystemdServicePath" || { printf >&2 "Failed to fetch autodnd.service"; exit 1; }
+chmod 644 "$autodndSystemdServicePath" &&  printf ":: Installed autodnd.service in '$HOME/.config/systemd/user'.\n"
 
 if ! systemctl --user daemon-reload; then
     printf >&2 "Failed to reload systemd manager configuration.\n"
