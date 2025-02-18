@@ -21,16 +21,19 @@ main() {
   local isNotificationsDeactivated
   isNotificationsDeactivated="$(swaync-client -D)"
   
-  
-  if [[ "${isCurrentWorkspaceFullscreen}" -eq "0" ]] || [[ "${numberOfWindowsInCurrentWorkspace}" -eq "0" ]]; then 
-        activateNotifications 
-        return
+  if [[ "${numberOfWindowsInCurrentWorkspace}" -eq 0 ]]; then 
+      if  [[ "${isNotificationsDeactivated}" == false ]]; then
+            return
+      else 
+            activateNotifications 
+            return
+      fi
   fi
 
-  if [[ "${isCurrentWorkspaceFullscreen}" -eq "1" ]] && [[ "${isNotificationsDeactivated}" == false ]]; then
+  if [[ "${isCurrentWorkspaceFullscreen}" -eq 1 ]] && [[ "${isNotificationsDeactivated}" == false ]]; then
        deactivateNotifications
-  elif [[ "${isCurrentWorkspaceFullscreen}" -eq "0" ]] && [[ "${isNotificationsDeactivated}" == true ]]; then
-         activateNotifications
+  elif [[ "${isCurrentWorkspaceFullscreen}" -eq 0 ]] && [[ "${isNotificationsDeactivated}" == true ]]; then
+        activateNotifications
   fi
 }
 
