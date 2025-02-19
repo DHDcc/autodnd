@@ -44,8 +44,5 @@ if [[ -z "$HYPRLAND_INSTANCE_SIGNATURE" ]]; then
 fi
 
 while true; do
-  if ! socat - "UNIX-CONNECT:$HYPRLAND_SOCKET2" | while read -r socatOutput; do main "${socatOutput}"; done; then
-    echo "Error: Failed to connect to Hyprland socket. Retrying in 1 second..."
-    sleep 1
-  fi
+   socat - "UNIX-CONNECT:$HYPRLAND_SOCKET2" | while read -r socatOutput; do main "${socatOutput}"; done
 done
