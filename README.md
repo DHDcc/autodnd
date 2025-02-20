@@ -2,22 +2,23 @@
 
 A small Bash script that automatically disables and re-enables notifications when a window is in full screen mode on Hyprland.
 
-## install
+## Installation
 
-Supported notification demons:
+### Dependencies:
+- hyprland
+- socat
+- swaync
 
-- [swaync](https://github.com/ErikReider/SwayNotificationCenter)
-
-### Option 1: Use the installation script.
+### Installation script:
 
 > [!WARNING]
-> Always read and understand scripts before executing them!
+> **Always** read and understand scripts before executing them!
 
 ```
 curl -fsSL https://raw.githubusercontent.com/DHDcc/autodnd/refs/heads/main/install.sh | sh
 ```
 
-### Option 2: Do it manually.
+### Manually install it:
 
 
 #### 1) Clone the repo:
@@ -48,11 +49,4 @@ OR
 ```
 exec-once = nohup ~/.local/bin/autodnd 0<&- &>/dev/null &
 ```
-#### 3.2.1) logout and re-login:
-
-```
-$ hyprctl dispatch exit 0
-$ uwsm stop # for uwsm users
-```
-
 
