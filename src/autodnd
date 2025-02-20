@@ -38,9 +38,9 @@ if [[ -z "$HYPRLAND_INSTANCE_SIGNATURE" ]]; then
 fi
 
 while true; do
-   socat - "UNIX-CONNECT:$HYPRLAND_SOCKET2" | while read -r socatOutput; do 
-       if [[ "${socatOutput}" == *"fullscreen"* ]] || [[ "${socatOutput}" == *"workspace"* ]]; then
-          main 
-       fi
-   done
+  socat - "UNIX-CONNECT:$HYPRLAND_SOCKET2" | while read -r socatOutput; do 
+    if [[ "${socatOutput}" =~ fullscreen|workspace ]]; then
+         main 
+     fi
+  done
 done
