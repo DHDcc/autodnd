@@ -6,12 +6,6 @@ activateNotifications() { swaync-client -df &> /dev/null; }
 deactivateNotifications() { swaync-client -dn &> /dev/null; }
 
 main() {
-  local socatOutput="${1}"
-
-  if [[ "${socatOutput}" != *"fullscreen"* ]] && [[ "${socatOutput}" != *"workspace"* ]]; then 
-       return
-  fi
-  
   local isCurrentWorkspaceFullscreen
   isCurrentWorkspaceFullscreen="$(hyprctl activeworkspace | awk '/fullscreen: [0-1]/ {print $2}')"
 
@@ -44,5 +38,9 @@ if [[ -z "$HYPRLAND_INSTANCE_SIGNATURE" ]]; then
 fi
 
 while true; do
-   socat - "UNIX-CONNECT:$HYPRLAND_SOCKET2" | while read -r socatOutput; do main "${socatOutput}"; done
+   socat - "UNIX-CONNECT:$HYPRLAND_SOCKET2" | while read -r socatOutput; do 
+       if [[ "${socatOutput}" == *"fullscreen"* ]] || [[ "${socatOutput}" == *"workspace"* ]]; then
+          main 
+       fi
+   done
 done
