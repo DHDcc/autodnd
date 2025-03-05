@@ -6,12 +6,12 @@ activateNotifications() { swaync-client -df > /dev/null; }
 deactivateNotifications() { swaync-client -dn > /dev/null; }
 
 main() {
-  isCurrentWorkspaceFullscreen="$(hyprctl activeworkspace | awk '/fullscreen: [0-1]/ {print $2}')"
+  isCurrentWorkspaceFullscreen="$(hyprctl -j activeworkspace | jq -r '.hasfullscreen')"
   isNotificationsDeactivated="$(swaync-client -D)"
   
-  if [ "$isCurrentWorkspaceFullscreen" = 1 ] && [ "$isNotificationsDeactivated" = false ]; then
+  if [ "$isCurrentWorkspaceFullscreen" = true ] && [ "$isNotificationsDeactivated" = false ]; then
        deactivateNotifications
-  elif [ "$isCurrentWorkspaceFullscreen" = 0 ] && [ "$isNotificationsDeactivated" = true ]; then
+  elif [ "$isCurrentWorkspaceFullscreen" = false ] && [ "$isNotificationsDeactivated" = true ]; then
         activateNotifications
   fi
 }
