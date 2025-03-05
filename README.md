@@ -1,11 +1,12 @@
 # AutoDnD 
 
-A small Bash script that automatically disables and re-enables notifications when a window is in full screen mode on Hyprland.
+A small POSIX compliant shell script that automatically disables and re-enables notifications when a window is in full screen mode on Hyprland.
 
 ## Installation
 
 ### Dependencies:
 - hyprland
+- jq
 - socat
 - swaync
 
