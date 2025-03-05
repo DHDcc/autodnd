@@ -1,37 +1,22 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 readonly HYPRLAND_SOCKET2="$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock"
 
-activateNotifications() { swaync-client -df &> /dev/null; }
-deactivateNotifications() { swaync-client -dn &> /dev/null; }
+activateNotifications() { swaync-client -df > /dev/null; }
+deactivateNotifications() { swaync-client -dn > /dev/null; }
 
 main() {
-  local isCurrentWorkspaceFullscreen
   isCurrentWorkspaceFullscreen="$(hyprctl activeworkspace | awk '/fullscreen: [0-1]/ {print $2}')"
-
-  local numberOfWindowsInCurrentWorkspace
-  numberOfWindowsInCurrentWorkspace="$(hyprctl activeworkspace | awk '/windows: [0-9]/ {print $2}')"
-
-  local isNotificationsDeactivated
   isNotificationsDeactivated="$(swaync-client -D)"
   
-  if [[ "${numberOfWindowsInCurrentWorkspace}" -eq 0 ]]; then 
-      if  [[ "${isNotificationsDeactivated}" == false ]]; then
-            return
-      else 
-            activateNotifications 
-            return
-      fi
-  fi
-
-  if [[ "${isCurrentWorkspaceFullscreen}" -eq 1 ]] && [[ "${isNotificationsDeactivated}" == false ]]; then
+  if [ "$isCurrentWorkspaceFullscreen" = 1 ] && [ "$isNotificationsDeactivated" = false ]; then
        deactivateNotifications
-  elif [[ "${isCurrentWorkspaceFullscreen}" -eq 0 ]] && [[ "${isNotificationsDeactivated}" == true ]]; then
+  elif [ "$isCurrentWorkspaceFullscreen" = 0 ] && [ "$isNotificationsDeactivated" = true ]; then
         activateNotifications
   fi
 }
 
-if [[ -z "$HYPRLAND_INSTANCE_SIGNATURE" ]]; then
+if [ -z "$HYPRLAND_INSTANCE_SIGNATURE" ]; then
   echo "Error: HYPRLAND_INSTANCE_SIGNATURE could not be determined."
   echo "Ensure Hyprland is running and try again."
   exit 1
@@ -39,7 +24,7 @@ fi
 
 while true; do
   socat - "UNIX-CONNECT:$HYPRLAND_SOCKET2" | while read -r socatOutput; do 
-    if [[ "${socatOutput}" =~ ^fullscreen|^workspace ]]; then
+    if echo "$socatOutput" | grep -Eq '(^fullscreen|^workspace)'; then
          main 
      fi
   done
