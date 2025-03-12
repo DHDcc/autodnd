@@ -48,6 +48,6 @@ OR
 #### 3.2) Use ```exec-once``` in your ```hyprland.conf``` file:
 
 ```
-exec-once = nohup ~/.local/bin/autodnd 0<&- &>/dev/null &
+exec-once = $HOME/.local/bin/autodnd
 ```
 
